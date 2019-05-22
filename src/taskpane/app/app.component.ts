@@ -23,4 +23,33 @@ export default class AppComponent {
       }
     );
   }
+
+  addText() {
+    Office.context.document.setSelectedDataAsync('Hello World!',
+        function (asyncResult) {
+            if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+                this.showNotification("Error", asyncResult.error.message);
+            }
+        });
+  }
+
+  showNotification(header, content) {
+    
+  }
+
+  addImage() {
+    FileReader.readFileSync()
+  }
+
+  insertImageFromBase64String(image) {
+    // Call Office.js to insert the image into the document.
+    Office.context.document.setSelectedDataAsync(image, {
+        coercionType: Office.CoercionType.Image
+    },
+        function (asyncResult) {
+            if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+                this.showNotification("Error", asyncResult.error.message);
+            }
+        });
+}
 }

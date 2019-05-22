@@ -1,5 +1,5 @@
 <header class="ms-welcome__header ms-bgColor-neutralLighter ms-u-fadeIn500">
-    <img width="90" height="90" src="../../../assets/logo-filled.png" alt="Contoso Task Pane Add-in" title="Contoso Task Pane Add-in" />
+    <img width="90" height="90" src="../../../assets/logo.png" alt="Contoso Task Pane Add-in" title="Contoso Task Pane Add-in" />
     <h1 class="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">{{welcomeMessage}}</h1>
 </header>
 <main class="ms-welcome__main">
@@ -18,6 +18,8 @@
             <span class="ms-font-m ms-fontColor-neutralPrimary">Create and visualize like a pro</span>
         </li>
     </ul>
+    <button class="ms-Button" (click)="addText()">Add Text</button>
+    <button class="ms-Button" (click)="addImage()">Add Image</button>
     <br />
     <br />
     <p class="ms-font-l">Modify the source files, then click <b>Run</b>.</p>
