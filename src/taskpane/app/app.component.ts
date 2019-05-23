@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 const template = require('./app.component.html');
 // import { HttpClient } from "@angular/common/http";
 
-// declare let auth0: any;
+declare let auth0: any;
 declare let $: any;
 
 @Component({
@@ -12,10 +12,10 @@ declare let $: any;
 export default class AppComponent {
   welcomeMessage = 'Welcome';
   // debugData = 'nothing';
-  // auth0 = new auth0.WebAuth({
-  //   domain: "auth.clarifyhealth.com",
-  //   clientID: "Sid0C7cddHikpgnAabf1C798XUtREtyX"
-  // });
+  auth0 = new auth0.WebAuth({
+    domain: "auth.clarifyhealth.com",
+    clientID: "Sid0C7cddHikpgnAabf1C798XUtREtyX"
+  });
   // constructor(private http: HttpClient){
 
   // }
@@ -53,14 +53,15 @@ export default class AppComponent {
     // https://docs.microsoft.com/en-us/office/dev/add-ins/images/office-add-ins-my-account.png
     // const data = await this.http.get("https://docs.microsoft.com/en-us/office/dev/add-ins/images/office-add-ins-my-account.png").toPromise();
     // this.insertImageFromBase64String(data);
+    let that = this;
     $.ajax({
-      url: "/api/Photo/", success: function (result) {
-          this.insertImageFromBase64String(result);
-      }, error: function (xhr, status, error) {
-          // showNotification("Error", "Oops, something went wrong.");
-          
-      }
-  });
+        url: "/assets/logo.png", success: function (result) {
+          that.insertImageFromBase64String(result);
+        }, error: function (xhr, status, error) {
+            // showNotification("Error", "Oops, something went wrong.");
+            console.log(error);
+        }
+    });
   }
 
   insertImageFromBase64String(image) {
@@ -76,7 +77,7 @@ export default class AppComponent {
   }
 
   login() {
-    // auth0.client.login({
+    // this.auth0.client.login({
     //   realm: 'Username-Password-Authentication', //connection name or HRD domain
     //   username: 'joey@clarifyhealth.com',
     //   password: 'Clarify1',
@@ -86,5 +87,15 @@ export default class AppComponent {
     //     this.debugData = authResult.toString();
     //     console.table(authResult);
     // });
+    this.auth0.client.loginWithDefaultDirectory({
+        realm: 'Username-Password-Authentication', //connection name or HRD domain
+      username: 'joey@clarifyhealth.com',
+      password: 'Clarify1',
+      audience: '',
+      scope: 'openid name email',
+      }, function(err, authResult) {
+        this.debugData = authResult.toString();
+        console.table(authResult);
+    });
   }
 }
