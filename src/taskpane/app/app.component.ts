@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 const template = require('./app.component.html');
 // import { HttpClient } from "@angular/common/http";
 
-declare let auth0: any;
+declare let Auth0: any;
 declare let $: any;
 
 @Component({
@@ -11,11 +11,8 @@ declare let $: any;
 })
 export default class AppComponent {
   welcomeMessage = 'Welcome';
+  auth0: any;
   // debugData = 'nothing';
-  auth0 = new auth0.WebAuth({
-    domain: "auth.clarifyhealth.com",
-    clientID: "Sid0C7cddHikpgnAabf1C798XUtREtyX"
-  });
   // constructor(private http: HttpClient){
 
   // }
@@ -87,15 +84,26 @@ export default class AppComponent {
     //     this.debugData = authResult.toString();
     //     console.table(authResult);
     // });
-    this.auth0.client.loginWithDefaultDirectory({
-        realm: 'Username-Password-Authentication', //connection name or HRD domain
-      username: 'joey@clarifyhealth.com',
-      password: 'Clarify1',
-      audience: '',
-      scope: 'openid name email',
-      }, function(err, authResult) {
-        this.debugData = authResult.toString();
-        console.table(authResult);
+    this.auth0 = new Auth0({
+        domain: 'clarifyhealth.auth0.com',
+        clientID: 'loXgNdZtCNuf8fe8J9qeAtyFTeXbFlJn',
+        callbackURL: '',
+        responseType: 'token'
     });
+    try {
+        this.auth0.login({
+            connection: 'Username-Password-Authentication',
+            email: 'joey@clarifyhealth.com',
+            password: 'Clarify1',
+            responseType: 'token',
+            sso: false,
+            scope: 'openid name email app_metadata identities'
+        }, (err: any, result: any) => {
+          console.log(result);
+        });
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 }
