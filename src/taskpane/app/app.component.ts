@@ -12,10 +12,7 @@ declare let $: any;
 export default class AppComponent {
   welcomeMessage = 'Welcome';
   auth0: any;
-  // debugData = 'nothing';
-  // constructor(private http: HttpClient){
-
-  // }
+  token: any;
 
   async run() {
     /**
@@ -47,17 +44,20 @@ export default class AppComponent {
   }
 
   async addImage() {
-    // https://docs.microsoft.com/en-us/office/dev/add-ins/images/office-add-ins-my-account.png
-    // const data = await this.http.get("https://docs.microsoft.com/en-us/office/dev/add-ins/images/office-add-ins-my-account.png").toPromise();
-    // this.insertImageFromBase64String(data);
     let that = this;
     $.ajax({
-        url: "/assets/logo.png", success: function (result) {
+        type: "GET",
+        url: "https://staging.clarifyhealth.com/api/avatar/person/ce6fd488-c1e0-43a9-ab54-26cd9bf9b11e",
+        beforeSend: function(request) {
+            request.setRequestHeader("authorization", 'Bearer' + ' ' + that.token);
+        },
+        success: function(result) {
           that.insertImageFromBase64String(result);
-        }, error: function (xhr, status, error) {
-            // showNotification("Error", "Oops, something went wrong.");
-            console.log(error);
-        }
+        },
+        error: function (xhr, status, error) {
+          // showNotification("Error", "Oops, something went wrong.");
+          console.log(error);
+      }
     });
   }
 
@@ -74,16 +74,6 @@ export default class AppComponent {
   }
 
   login() {
-    // this.auth0.client.login({
-    //   realm: 'Username-Password-Authentication', //connection name or HRD domain
-    //   username: 'joey@clarifyhealth.com',
-    //   password: 'Clarify1',
-    //   audience: '',
-    //   scope: 'openid name email',
-    //   }, function(err, authResult) {
-    //     this.debugData = authResult.toString();
-    //     console.table(authResult);
-    // });
     this.auth0 = new Auth0({
         domain: 'clarifyhealth.auth0.com',
         clientID: 'loXgNdZtCNuf8fe8J9qeAtyFTeXbFlJn',
@@ -99,6 +89,7 @@ export default class AppComponent {
             sso: false,
             scope: 'openid name email app_metadata identities'
         }, (err: any, result: any) => {
+          this.token = result.idToken;
           console.log(result);
         });
     }
